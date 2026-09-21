@@ -1,68 +1,164 @@
 # DBZK_Fix
 
-## About:
-A mod that aims to remove the game's 60FPS cap during gameplay, adding 21:9/16:10/4:3 support, a toggle to disable motion blur, and TAA tweaks that are useful for upscaling, without the need to modify any extra configuration files.
+A maintained fork of **DBZK_Fix** focused on stability and compatibility across **Windows, Linux/Proton, and Steam Deck**.
 
-## Known Issues:
+This fork keeps the original goals of the project while reworking parts of the UE4SS initialization flow to avoid crashes caused by accessing Unreal Engine objects before they are ready.
 
-- All previous issues from [initial release](https://github.com/KingKrouch/DBZK_Fix/issues)
+## Features
 
-- The game is still running with a Vert- FOV. I still need to find reliable hooks for the LocalPlayer (Required to change the game to Hor+ scaling), and then some hooks for adjusting the FOV during gameplay, as early versions of Unreal Engine 4 don't automatically calculate the correct field of view. The FOV issue doesn't matter as much with 21:9 (I was able to play the game from start to finish), and it's a non-issue with 16:10 or 4:3 (Where the top and bottom expands to a similar viewing space to 16:9).
+- Removes the game's 60 FPS cap during gameplay
+- 21:9, 16:10 and 4:3 aspect-ratio support
+- Optional motion blur disable
+- Temporal AA / upscaling tweaks
+- FOV and camera adjustments
+- Reapplies framerate-related settings during relevant game/cutscene transitions
+- Safer UObject validation
+- Deferred initialization for Unreal Engine objects
+- Safer handling of UE4SS hooks and callbacks
+- Improved Linux / Proton / Steam Deck stability
 
-- Certain UI elements (The Game Over screen), The options menu categories, the level up UI element, and the UI targeting portion are all still using incorrect widget anchors. These need to be fixed to be the center of the screen rather than to the upper left (Which is the default anchoring position in Unreal, this tends to be a problem with games that use hardcoded UI coordinates). Likewise, two montage portions later on in the game with still images are anchored to the left side of the screen.
+## Compatibility
 
-- Some cutscenes are stretched, for some reason. Unsure if this can be changed, but if they are contained within a UMG widget, it should be possible.
+### Tested
 
-There's probably a few more things that I'm glossing over, but within the source files, it should contain some notes.
+- Steam Deck / SteamOS
+- Linux + Proton
 
-## Setup:
-If using the HD Update:
-- Extract the contents of the downloaded .ZIP file in the releases section into the **"\dlc\Remaster\AT\Binaries\Win64\"** directory of where the game is installed.
+### Expected compatible
 
-If using base version: (I have not tested this version with the non-HD version...might be better to use the previous version [here](https://github.com/KingKrouch/DBZK_Fix/releases/tag/Alpha_Build_01))
-- Extract the contents of the downloaded .ZIP file in the releases section into the **"\AT\Binaries\Win64\"** directory of where the game is installed.
+- Windows 10
+- Windows 11
 
-*Note: If you don't have any other Steam library locations set up, this will likely be **"C:\Program Files (x86)\Steam\SteamApps\Common\DRAGON BALL Z KAKAROT"**.*
+Windows support is expected because the mod still uses standard UE4SS Lua APIs and does not rely on SteamOS- or Linux-specific paths or commands. However, this fork should be considered **not yet revalidated on Windows** until it has been tested there directly.
 
-For Proton and Steam Deck Users: No further setup is necessary.
+## What changed in this fork
 
-## Download (For novices):
-[Latest version can be downloaded here.](https://github.com/NicNamed/DBZK_Fix/releases).
+The original mod could execute several Unreal Engine operations very early during startup. Under Proton / Steam Deck, some Unreal objects may not yet exist or may not be valid at that point, which could lead to access violations and crashes.
 
-## Special Thanks:
-- [KingKrouch](https://github.com/KingKrouch) for the work on the initial release! Wouldn't have known where to start without their help :D
+This fork changes that behavior by:
 
-- [Special Week (real)](https://steamcommunity.com/sharedfiles/filedetails/?id=3527702022) for figuring out updating UE4SS fixed issues after the HD Update!
+- Waiting for relevant Unreal Engine objects before modifying them
+- Validating UObjects before use
+- Delaying FPS changes until a valid `ATCheatManager` is available
+- Avoiding the original immediate `Fix()` execution during startup
+- Running sensitive game-side changes at safer points in the Unreal lifecycle
+- Correcting UE4SS hook parameter handling where required
+- Keeping the original framerate, FOV, camera and graphics functionality while using a safer initialization model
 
-## Support The Project:
+The goal is to retain the behavior of DBZK_Fix while making it more robust under Proton and Steam Deck.
 
-Nic_Named's: [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/nic_named)
-<br>
-KingKrouch's: [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/kingkrouch)
+## Known Issues
 
-## Licensing:
+The following limitations from the original project may still apply:
 
-- [UE4SS](https://github.com/UE4SS-RE/RE-UE4SS) is licensed under the MIT License.
-- [inifile](https://github.com/bartbes/inifile/) is licensed under the Simplified BSD License.
+- Some UI elements can use incorrect widget anchors on non-16:9 aspect ratios.
+- Certain menus and HUD elements may not always be perfectly centered.
+- Some pre-rendered or real-time cutscenes may still display incorrectly at ultrawide aspect ratios.
+- Some game-specific FOV behavior may still vary depending on the scene.
+
+Please report reproducible issues in this repository's **Issues** section and include:
+
+- Operating system
+- Proton / Wine version, if applicable
+- Game version
+- UE4SS version
+- Relevant `UE4SS.log`
+- Crash dump, if one was generated
+
+## Setup
+
+### HD / Remaster Update
+
+Extract the contents of the release `.zip` into:
+
+```text
+DRAGON BALL Z KAKAROT/dlc/Remaster/AT/Binaries/Win64/
+```
+
+### Base version
+
+For the original non-HD version, extract the contents into:
+
+```text
+DRAGON BALL Z KAKAROT/AT/Binaries/Win64/
+```
+
+The base version has not yet been revalidated with this fork.
+
+### Proton / Steam Deck
+
+No additional DBZK_Fix configuration should normally be required.
+
+The mod is designed to wait for the required Unreal Engine objects instead of assuming they already exist during startup.
+
+## Configuration
+
+Configuration continues to use the existing `Config.ini`.
+
+The framerate section controls the FPS unlock behavior, including:
+
+- Maximum FPS
+- Fixed or variable framerate mode
+- VSync interval
+
+Other existing graphics options remain available where supported by the game.
+
+## Download
+
+Download the latest build from the **Releases** section of this repository.
+
+## Credits
+
+This project is a modified fork of the original **DBZK_Fix**.
+
+Special thanks to:
+
+- [KingKrouch](https://github.com/KingKrouch) / Bryce Q. for the original DBZK_Fix project and implementation
+- [NicNamed](https://github.com/NicNamed) for later work on the project and HD Update support
+- [Special Week (real)](https://steamcommunity.com/sharedfiles/filedetails/?id=3527702022) for identifying UE4SS update-related fixes for the HD Update
+- [UE4SS](https://github.com/UE4SS-RE/RE-UE4SS) contributors for the Unreal Engine scripting/modding framework
+
+## Fork goals
+
+This fork currently focuses on:
+
+- Proton compatibility
+- Steam Deck stability
+- safer UE4SS initialization
+- preserving the original DBZK_Fix feature set
+- maintaining compatibility with Windows where possible
+
+Future changes should continue to keep platform-specific workarounds out of the gameplay logic whenever possible so the same Lua mod can be shared across Windows and Proton.
+
+## Licensing
+
+DBZK_Fix is derived from the original project by Bryce Q. and remains distributed under the MIT License.
+
+### Original copyright
 
 **DBZK_Fix (C) 2024 Bryce Q.**
 
-**Permission is hereby granted, free of charge, to any person obtaining a copy
+Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:**
+furnished to do so, subject to the following conditions:
 
-**The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.**
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-**THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.**
+SOFTWARE.
 
-**[See the MIT License for more details.](https://github.com/KingKrouch/DBZK_Fix/blob/main/LICENSE)**
+Additional bundled dependencies may use their own licenses:
+
+- [UE4SS](https://github.com/UE4SS-RE/RE-UE4SS) — MIT License
+- [inifile](https://github.com/bartbes/inifile/) — Simplified BSD License
+
+See the repository's `LICENSE` file for the complete license text.
