@@ -1,7 +1,22 @@
-
+---@diagnostic disable: undefined-global
 
 -- ============================================================
--- DBZK_Fix 0.4.1-linux - Linux/Proton safe full build
+-- DBZK_Fix_LINUX v0.4.1
+--
+-- Based on DBZK_Fix by Bryce Q. / KingKrouch
+-- Original project licensed under the MIT License.
+--
+-- Linux / Proton compatibility fork:
+-- https://github.com/neruk123-droid/DBZK_Fix_LINUX
+--
+-- Changes in this fork:
+--   - Deferred Unreal Engine object initialization
+--   - Safer UObject validation
+--   - Steam Deck / Proton crash fix
+--   - Corrected UE4SS FOV hook handling
+--   - Safe game-thread execution
+--   - Modular feature switches
+-- ============================================================
 
 local version = "0.4.1-linux"
 
@@ -47,7 +62,7 @@ local vsyncInterval = 1
 local ogAspectRatio = 16 / 9
 
 ---@type boolean
-local verbose = true
+local verbose = false
 
 ---@type UObject
 local currentCheatManager = nil
