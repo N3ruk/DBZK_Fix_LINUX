@@ -1,23 +1,9 @@
----@diagnostic disable: undefined-global
+
 
 -- ============================================================
--- DBZK_Fix 0.4 - Linux/Proton safe full build
---
--- Base: FPS-only build confirmed working on Steam Deck.
---
--- Goals:
---   - Restore all original DBZK_Fix 0.4 functionality.
---   - Keep the safe initialization order that fixed the Deck crash.
---   - Never run the old global Fix() immediately at startup.
---   - Validate UObjects before use.
---   - Run console-command work on the game thread.
---   - Use RegisterHook's Context/RemoteUnrealParam API correctly.
---
--- If this full build crashes, use the feature switches below
--- to disable one block at a time without rewriting the script.
--- ============================================================
+-- DBZK_Fix 0.4.1-linux - Linux/Proton safe full build
 
-local version = "0.4-linux-safe-full-test"
+local version = "0.4.1-linux"
 
 local UEHelpers = require("UEHelpers")
 local inifile = require("inifile")
