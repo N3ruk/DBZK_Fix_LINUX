@@ -1,83 +1,69 @@
-# DBZK_Fix
+# DBZK_Fix for Linux / Steam Deck — Dragon Ball Z: Kakarot FPS & Ultrawide Fix
 
-A maintained fork of **DBZK_Fix** focused on stability and compatibility across **Windows, Linux/Proton, and Steam Deck**.
+**DBZK_Fix** is a maintained **Dragon Ball Z: Kakarot mod/fix** focused on **Linux, Proton and Steam Deck** compatibility while preserving the original Windows feature set.
 
-This fork keeps the original goals of the project while reworking parts of the UE4SS initialization flow to avoid crashes caused by accessing Unreal Engine objects before they are ready.
+This fork removes the **60 FPS cap**, supports **21:9 ultrawide / 16:10 / 4:3 aspect ratios**, provides FOV and camera tweaks, and reworks the **UE4SS** initialization flow to reduce crashes caused by accessing Unreal Engine objects before they are ready.
 
-## Features
+If you are looking for a **Dragon Ball Z: Kakarot Linux fix**, **Kakarot Steam Deck mod**, **Kakarot FPS unlock**, **Kakarot ultrawide fix** or a more stable DBZK_Fix build under Proton, this repository is intended for that use case.
 
-- Removes the game's 60 FPS cap during gameplay
-- 21:9, 16:10 and 4:3 aspect-ratio support
-- Optional motion blur disable
-- Temporal AA / upscaling tweaks
-- FOV and camera adjustments
-- Reapplies framerate-related settings during relevant game/cutscene transitions
-- Safer UObject validation
-- Deferred initialization for Unreal Engine objects
-- Safer handling of UE4SS hooks and callbacks
-- Improved Linux / Proton / Steam Deck stability
+## Key features
+
+- Removes the game's **60 FPS cap** during gameplay.
+- **21:9 ultrawide**, **16:10** and **4:3** aspect-ratio support.
+- Optional motion-blur disable.
+- Temporal AA / upscaling tweaks.
+- FOV and camera adjustments.
+- Reapplies framerate-related settings during game/cutscene transitions.
+- Safer UObject validation.
+- Deferred Unreal Engine object initialization.
+- Safer UE4SS hook and callback handling.
+- Improved **Linux / Proton / Steam Deck** stability.
 
 ## Compatibility
 
 ### Tested
 
-- Steam Deck / SteamOS
-- Linux + Proton
+- **Steam Deck / SteamOS**
+- **Linux + Proton**
 
 ### Expected compatible
 
 - Windows 10
 - Windows 11
 
-Windows support is expected because the mod still uses standard UE4SS Lua APIs and does not rely on SteamOS- or Linux-specific paths or commands. However, this fork should be considered **not yet revalidated on Windows** until it has been tested there directly.
+Windows support is expected because the mod still uses standard UE4SS Lua APIs and does not depend on Linux- or SteamOS-specific paths or commands. It should still be considered **not yet revalidated on Windows** until tested there directly.
 
-## What changed in this fork
+## Why this fork exists
 
-The original mod could execute several Unreal Engine operations very early during startup. Under Proton / Steam Deck, some Unreal objects may not yet exist or may not be valid at that point, which could lead to access violations and crashes.
+The original DBZK_Fix could perform several Unreal Engine operations very early during startup. Under **Proton and Steam Deck**, some required Unreal objects may not yet exist or may not be valid, which can lead to access violations and crashes.
 
 This fork changes that behavior by:
 
-- Waiting for relevant Unreal Engine objects before modifying them
-- Validating UObjects before use
-- Delaying FPS changes until a valid `ATCheatManager` is available
-- Avoiding the original immediate `Fix()` execution during startup
-- Running sensitive game-side changes at safer points in the Unreal lifecycle
-- Correcting UE4SS hook parameter handling where required
-- Keeping the original framerate, FOV, camera and graphics functionality while using a safer initialization model
+- Waiting for relevant Unreal Engine objects before modifying them.
+- Validating UObjects before use.
+- Delaying FPS changes until a valid `ATCheatManager` is available.
+- Avoiding the original immediate `Fix()` call during startup.
+- Running sensitive changes at safer points in the Unreal lifecycle.
+- Correcting UE4SS hook parameter handling where required.
+- Preserving the original framerate, FOV, camera and graphics functionality.
 
-The goal is to retain the behavior of DBZK_Fix while making it more robust under Proton and Steam Deck.
+The goal is to keep DBZK_Fix useful on Windows while making it more robust on **Linux, Proton and Steam Deck**.
 
-## Known Issues
+## Installation
 
-The following limitations from the original project may still apply:
+Download the latest build from the repository's **Releases** section.
 
-- Some UI elements can use incorrect widget anchors on non-16:9 aspect ratios.
-- Certain menus and HUD elements may not always be perfectly centered.
-- Some pre-rendered or real-time cutscenes may still display incorrectly at ultrawide aspect ratios.
-- Some game-specific FOV behavior may still vary depending on the scene.
+### Dragon Ball Z: Kakarot HD / Remaster Update
 
-Please report reproducible issues in this repository's **Issues** section and include:
-
-- Operating system
-- Proton / Wine version, if applicable
-- Game version
-- UE4SS version
-- Relevant `UE4SS.log`
-- Crash dump, if one was generated
-
-## Setup
-
-### HD / Remaster Update
-
-Extract the contents of the release `.zip` into:
+Extract the release ZIP into:
 
 ```text
 DRAGON BALL Z KAKAROT/dlc/Remaster/AT/Binaries/Win64/
 ```
 
-### Base version
+### Base game version
 
-For the original non-HD version, extract the contents into:
+For the original non-HD version, extract the release ZIP into:
 
 ```text
 DRAGON BALL Z KAKAROT/AT/Binaries/Win64/
@@ -87,50 +73,68 @@ The base version has not yet been revalidated with this fork.
 
 ### Proton / Steam Deck
 
-No additional DBZK_Fix configuration should normally be required.
+No extra DBZK_Fix-specific setup should normally be required.
 
-The mod is designed to wait for the required Unreal Engine objects instead of assuming they already exist during startup.
+The mod is designed to wait for the required Unreal Engine objects instead of assuming they are already available during startup.
 
 ## Configuration
 
 Configuration continues to use the existing `Config.ini`.
 
-The framerate section controls the FPS unlock behavior, including:
+The framerate section controls FPS-unlock behavior, including:
 
-- Maximum FPS
-- Fixed or variable framerate mode
-- VSync interval
+- Maximum FPS.
+- Fixed or variable framerate mode.
+- VSync interval.
 
-Other existing graphics options remain available where supported by the game.
+Other graphics options remain available where supported by the game.
 
-## Download
+## Known issues
 
-Download the latest build from the **Releases** section of this repository.
+Limitations inherited from the original project may still apply:
+
+- Some UI elements can use incorrect widget anchors on non-16:9 aspect ratios.
+- Certain menus and HUD elements may not always be perfectly centered.
+- Some pre-rendered or real-time cutscenes may still display incorrectly at ultrawide aspect ratios.
+- Some FOV behavior can vary by scene.
+
+When reporting an issue, please include:
+
+- Operating system.
+- Proton / Wine version, if applicable.
+- Dragon Ball Z: Kakarot game version.
+- UE4SS version.
+- Relevant `UE4SS.log`.
+- Crash dump, if one was generated.
+
+## Search-friendly project summary
+
+This project is a **Dragon Ball Z: Kakarot UE4SS mod** for **Steam Deck and Linux/Proton** that combines the original DBZK_Fix functionality with safer initialization. Its main user-facing features are **FPS unlock**, **ultrawide support**, **aspect-ratio fixes**, **FOV tweaks** and improved stability under Proton.
 
 ## Credits
 
-This project is a modified fork of the original **DBZK_Fix**.
+This repository is a modified fork of the original **DBZK_Fix**.
 
 Special thanks to:
 
-- [KingKrouch](https://github.com/KingKrouch) / Bryce Q. for the original DBZK_Fix project and implementation
-- [NicNamed](https://github.com/NicNamed) for later work on the project and HD Update support
-- [Special Week (real)](https://steamcommunity.com/sharedfiles/filedetails/?id=3527702022) for identifying UE4SS update-related fixes for the HD Update
-- [UE4SS](https://github.com/UE4SS-RE/RE-UE4SS) contributors for the Unreal Engine scripting/modding framework
+- [KingKrouch](https://github.com/KingKrouch) / Bryce Q. for the original DBZK_Fix project and implementation.
+- [NicNamed](https://github.com/NicNamed) for later work on the project and HD Update support.
+- [Special Week (real)](https://steamcommunity.com/sharedfiles/filedetails/?id=3527702022) for identifying UE4SS update-related fixes for the HD Update.
+- [UE4SS](https://github.com/UE4SS-RE/RE-UE4SS) contributors for the Unreal Engine scripting/modding framework.
 
 ## Fork goals
 
-This fork currently focuses on:
+This fork focuses on:
 
-- Proton compatibility
-- Steam Deck stability
-- safer UE4SS initialization
-- preserving the original DBZK_Fix feature set
-- maintaining compatibility with Windows where possible
+- Proton compatibility.
+- Steam Deck stability.
+- Safer UE4SS initialization.
+- Preserving the original DBZK_Fix feature set.
+- Maintaining Windows compatibility where possible.
 
-Future changes should continue to keep platform-specific workarounds out of the gameplay logic whenever possible so the same Lua mod can be shared across Windows and Proton.
+Future changes should keep platform-specific workarounds out of gameplay logic whenever possible so the same Lua mod can be shared across Windows and Proton.
 
-## Licensing
+## License
 
 DBZK_Fix is derived from the original project by Bryce Q. and remains distributed under the MIT License.
 
@@ -158,7 +162,7 @@ SOFTWARE.
 
 Additional bundled dependencies may use their own licenses:
 
-- [UE4SS](https://github.com/UE4SS-RE/RE-UE4SS) — MIT License
-- [inifile](https://github.com/bartbes/inifile/) — Simplified BSD License
+- [UE4SS](https://github.com/UE4SS-RE/RE-UE4SS) — MIT License.
+- [inifile](https://github.com/bartbes/inifile/) — Simplified BSD License.
 
 See the repository's `LICENSE` file for the complete license text.
