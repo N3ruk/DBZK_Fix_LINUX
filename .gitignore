@@ -41,3 +41,10 @@ luac.out
 
 # VSCode workspace settings
 .vscode/
+# Installer builds and test caches
+__pycache__/
+.pytest_cache/
+build/
+dist/
+payload/
+*.run

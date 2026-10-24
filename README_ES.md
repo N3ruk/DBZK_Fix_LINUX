@@ -47,33 +47,34 @@ Este fork modifica ese comportamiento:
 - Corrige el tratamiento de parámetros de hooks de UE4SS cuando es necesario.
 - Conserva las funciones originales de framerate, FOV, cámara y gráficos.
 
-## Instalación
+## Instalación — Instalador Linux 0.4.2
 
-Descarga la versión más reciente desde la sección **Releases** del repositorio.
+**Esta actualización solo facilita la instalación. El mod, las DLL y el funcionamiento de la versión 0.4.1 permanecen intactos.**
 
-### Dragon Ball Z: Kakarot HD / Remaster Update
+1. Descarga **DBZK-Fix-Linux-0.4.2.run** desde [Releases](https://github.com/N3ruk/DBZK_Fix_LINUX/releases).
+2. En Steam Deck/SteamOS usa **modo Escritorio**. Guarda las partidas y cierra los juegos.
+3. Ejecuta el archivo descargado. Si tu escritorio no abre scripts, abre una terminal en esa carpeta y ejecuta:
 
-Extrae el contenido del ZIP en:
+   ```bash
+   bash DBZK-Fix-Linux-0.4.2.run
+   ```
 
-```text
-DRAGON BALL Z KAKAROT/dlc/Remaster/AT/Binaries/Win64/
-```
+4. Acepta la instalación detectada. **El instalador cierra Steam, espera a que guarde sus ajustes y después instala el mod y configura las opciones de lanzamiento.**
+5. Abre Steam de nuevo y juega a cualquiera de las ediciones instaladas.
 
-### Versión base
+Alternativa: extrae **DBZK-Fix-Linux-0.4.2.zip** y ejecuta **Instalar.sh**. No copies el paquete entero a Win64. Ambos formatos incluyen el mod para instalar sin conexión. Necesitas **Python 3.8+**, pero no sudo, paquetes de pip ni protontricks. Hay diálogos opcionales kdialog/zenity y alternativa de terminal.
 
-Para la versión original sin HD Update:
+### Detección y activación automáticas
 
-```text
-DRAGON BALL Z KAKAROT/AT/Binaries/Win64/
-```
+- Steam nativo, Flatpak y Snap, con bibliotecas en discos externos o tarjetas SD.
+- Localiza el juego por AppID **851850**, sin rutas personales fijas.
+- Instala y activa el mod en la versión **normal y Remastered** que estén presentes: `AT/Binaries/Win64/` y `dlc/Remaster/AT/Binaries/Win64/`.
+- Configura `WINEDLLOVERRIDES="dwmapi=n,b" %command%` en los perfiles locales existentes, conservando otras opciones y overrides de DLL.
+- Conserva `Config.ini`, ajustes UE4SS y otros mods; crea copias de seguridad de lo reemplazado y permite restaurar.
 
-La versión base todavía no se ha revalidado con este fork.
+Para comprobar sin cerrar Steam ni instalar: `bash DBZK-Fix-Linux-0.4.2.run --check`. Consulta [la documentación del instalador](docs/INSTALLER.md) para rutas manuales, requisitos y restauración.
 
-### Proton / Steam Deck
-
-Normalmente no debería ser necesaria ninguna configuración adicional específica de DBZK_Fix.
-
-El mod espera a que los objetos necesarios de Unreal Engine estén disponibles en lugar de asumir que existen durante el arranque.
+El instalador no depende de una distribución concreta. Las pruebas de instalación se realizan con entornos simulados; no implican nuevas pruebas de juego en todas las distribuciones ni revalidación de la versión base, que mantiene las limitaciones indicadas en 0.4.1. El nuevo instalador automático es solo para Linux; no cambia el uso manual del mod en otras plataformas. Descarga el asset .run o .zip de la release, no el ZIP automático de código fuente de GitHub, que no incluye las DLL.
 
 ## Configuración
 
